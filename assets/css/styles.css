@@ -160,9 +160,8 @@ display: flex;
 align-items: center;
 justify-content: center;
 margin: 0 auto;
-padding: 75px 5px;
+padding: 75px 5px 10px;
 padding-left: 200px;
-border-bottom: 1px solid #dcd9d9;
 font-family: 'retro1', sans-serif;
 }
 #about h2 {
@@ -195,6 +194,41 @@ font-size: 1.3em;
 padding: 50px 15px;
 text-align: center;
 border-bottom: 1px solid #e4e4e4;
+}
+#game-timer {
+  padding: 0;
+  margin: 0;
+}
+#timer-wrap {
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  }
+#gg-wp {
+  padding: 50px 15px;
+  text-align: center;
+  }
+#victory {
+  padding: 50px 15px;
+  text-align: center;
+}
+#game {
+  padding: 10px 15px 50px 15px;
+  text-align: center;
+  }
+.game-answer {
+  display: block;
+  margin: 7px;
+  padding: 25px 10px;
+  color: #374054;
+  background: #e4e4ea;
+  list-style: none;
+  font-size: 1.3em;
+  border: 3px solid #868687;
+  }
+
+#start-game:hover {
+  cursor: URL("../../assets/img/cursor/cursor-edit.png"), auto;
 }
 #education h2 {
 color: #374054;
@@ -298,6 +332,11 @@ border: 3px solid #949494;
 .project-image {
 float: left;
 }
+.project-image img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
 .project-cc-image {
 min-width: 300px;
 min-height: 300px;
