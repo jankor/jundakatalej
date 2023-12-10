@@ -21,11 +21,13 @@ Description: This file contains all structure of my portfolio page
   <link rel="stylesheet" href="assets/css/retro.css">
   <script src="jquery.min.js"></script>
   <script>
+
     const civs = {
       1: 'Armenians',
       2: 'Aztecs',
       3: 'Bengalis',
       4: 'Berbers',
+      /*
       5: 'Bohemians',
       6: 'Britons',
       7: 'Bulgarians',
@@ -66,12 +68,28 @@ Description: This file contains all structure of my portfolio page
       42: 'Teutons',
       43: 'Turks',
       44: 'Vietnamese',
-      45: 'Vikings',
+      45: 'Vikings',*/
     }
 
     let civStack = [];
+    let topScore = [];
     let gameTime = 0;
     let timerId = null;
+    const quizUrl = 'https://api.npoint.io/77dedc757a41fd0cde11';
+
+    const loadScore = async () => {
+      const response = await fetch(quizUrl);
+      const topScoreCurrent = await response.json();
+      topScore = topScoreCurrent.topScore;
+
+      const topScoreList = topScoreCurrent.topScore.map(({nick, time}) => {
+        const min = Math.floor(time / 60);
+        const sec = time % 60;
+        
+        return (`<h2>${nick} - ${min}:${sec}</h2>`); 
+      }).join(""); 
+      $("#top-score-list").html(topScoreList);
+    }
     
     function startTimer() {
       gameTime = 1;
@@ -127,7 +145,6 @@ Description: This file contains all structure of my portfolio page
       const currentAnswers = getAnswers(currentCiv);
       $("#civImg").attr("src",`assets/img/civs/${currentCiv}.webp`);
       currentAnswers.map((answer, i) => {
-        console.log(i);
         $(`#civAnswer${i+1}`).html(civs[answer]);  
       })
     }
@@ -137,12 +154,14 @@ Description: This file contains all structure of my portfolio page
           $('<img/>')[0].src = this;
       });
     }
-
+    loadScore();
     $(document).ready(function() {
       $("#game").hide();
       $("#gg-wp").hide();
       $("#victory").hide();
       $("#timer-wrap").hide();
+      $("#score-form").hide();
+
       const civsPreload = getCivKeys(civs).map(civ => `assets/img/civs/${civ}.webp`);
       preload(civsPreload);
       
@@ -151,6 +170,7 @@ Description: This file contains all structure of my portfolio page
         $("#timer-wrap").show();
         $("#gg-wp").hide();
         $("#victory").hide();
+        $("#score-form").hide();
         startTimer();
         civStack = shuffle(getCivKeys(civs));
         setQuestion();
@@ -164,6 +184,10 @@ Description: This file contains all structure of my portfolio page
             $("#game").hide();
             $("#victory").show();
             stopTimer(false);
+            topScoreL = topScore.length;
+            if (topScoreL < 10 || topScore[topScoreL-1].time > gameTime) {
+              $("#score-form").show();
+            }
           } else {
             civStack.pop();
             setQuestion();
@@ -176,7 +200,24 @@ Description: This file contains all structure of my portfolio page
           $("#timer-wrap").hide();
         }
       });
-    });
+
+      $("#score-form-form").on("submit", (async (event) => {
+        event.preventDefault();
+        const response = await fetch(quizUrl);
+        const topScoreCurrent = await response.json();
+        const nick = $("#nick-input").val();
+        const addScore = [...topScoreCurrent.topScore, {nick, time: gameTime }]
+        addScore.sort((a, b) => a.time - b.time);
+        const newScore = addScore.slice(0, 10);
+        topScore = newScore;
+        fetch(quizUrl, {
+          method: 'POST',
+          body: JSON.stringify({topScore})
+      });
+      $("#score-form").hide();
+    }));
+
+  });
 
 
   </script>
@@ -203,8 +244,8 @@ Description: This file contains all structure of my portfolio page
           <br>
           
           <audio controls autoplay loop>
-            <source src="jendakatalej.mp3" type="audio/ogg">
-            <embed src="jendakatalej.mp3" autostart="true" loop="true" hidden="true"> 
+            <source src="jendakatalej.ogg" type="audio/ogg">
+            <embed src="jendakatalej.ogg" autostart="true" loop="true" hidden="true"> 
           </audio>
           
         </div>
@@ -232,6 +273,12 @@ Description: This file contains all structure of my portfolio page
     <div class="game-answer" data-answer="3" id="civAnswer4">
     </div>
   </div>
+  <div id="score-form">
+    <form id="score-form-form">
+      <input id="nick-input" type="text" class="shadow" name="_replyto" placeholder="Your nick" required>
+      <button class="btn" type="submit">Submit Score</button>
+    </form>
+  </div>
   <div id="gg-wp">
     <h2>GG WP try it again
     </h2>
@@ -239,6 +286,12 @@ Description: This file contains all structure of my portfolio page
   <div id="victory">
     <h2>You are victorious
     </h2>
+  </div>
+  <div id="top-score" class="background-alt">
+    <h2 class="heading">Top Score
+    </h2>
+    <div id="top-score-list">
+    </div>
   </div>
   <div id="education" class="background-alt">
     <h2 class="heading">History
