@@ -85,7 +85,7 @@ Description: This file contains all structure of my portfolio page
         const min = Math.floor(time / 60);
         const sec = time % 60;
         
-        return (`<h2>${nick} - ${min}:${sec}</h2>`); 
+        return (`<h2>${nick} - ${min}:${sec < 10 ? 0 : ""}${sec}</h2>`); 
       }).join(""); 
       $("#top-score-list").html(topScoreList);
     }
