@@ -91,18 +91,19 @@ Description: This file contains all structure of my portfolio page
     }
     
     function startTimer() {
-      gameTime = 1;
+      gameTime = 1.00;
       $("#game-timer").html(gameTime);
       timerId = setInterval(() => {
-        gameTime = gameTime + 1;
+        gameTime = gameTime + 0.1;
         const min = Math.floor(gameTime / 60);
-        const sec = gameTime % 60;
+        const sec = Math.floor (gameTime % 60);
+        const msec = Math.floor((gameTime % 1) * 10);
         if (min === 0) {
-          $("#game-timer").html(gameTime); 
+          $("#game-timer").html(`${sec}.${msec}`); 
         } else {
-          $("#game-timer").html(`${min}:${sec}`); 
+          $("#game-timer").html(`${min}:${sec}.${msec}`); 
         }
-      }, 1000)
+      }, 100)
     }
 
     function stopTimer(reset) {
@@ -206,7 +207,7 @@ Description: This file contains all structure of my portfolio page
         const response = await fetch(quizUrl);
         const topScoreCurrent = await response.json();
         const nick = $("#nick-input").val();
-        const addScore = [...topScoreCurrent.topScore, {nick, time: gameTime }]
+        const addScore = [...topScoreCurrent.topScore, {nick, time: Math.round(gameTime * 10) / 10 }]
         addScore.sort((a, b) => a.time - b.time);
         const newScore = addScore.slice(0, 10);
         topScore = newScore;
@@ -319,12 +320,32 @@ Description: This file contains all structure of my portfolio page
       <div class="row">
         <div class="project shadow-large">
           <div class="project-image">
+            <img src="assets/img/hlasky/bug2.webp" alt="Klabaska" />
+          </div>
+        </div>
+        <div class="project shadow-large">
+          <div class="project-image">
+            <img src="assets/img/hlasky/neunesl.png" alt="Klabaska" />
+          </div>
+        </div>
+        <div class="project shadow-large">
+          <div class="project-image">
             <img src="assets/img/hlasky/klobaska.jpg" alt="Klabaska" />
           </div>
         </div>
         <div class="project shadow-large">
           <div class="project-image">
             <img src="assets/img/hlasky/pero.png" alt="Klabaska" />
+          </div>
+        </div>
+        <div class="project shadow-large">
+          <div class="project-image">
+            <img src="assets/img/hlasky/neochotny.png" alt="Klabaska" />
+          </div>
+        </div>
+        <div class="project shadow-large">
+          <div class="project-image">
+            <img src="assets/img/hlasky/vezka.png" alt="Klabaska" />
           </div>
         </div>
         <div class="project shadow-large">
