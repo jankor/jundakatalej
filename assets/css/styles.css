@@ -241,6 +241,12 @@ border-bottom: 1px solid #e4e4e4;
 #start-game:hover {
   cursor: URL("../../assets/img/cursor/cursor-edit.png"), auto;
 }
+#members-list {
+  margin: 30px auto 0 auto;
+  position: relative;
+  max-width: 1000px;
+  font-family: sans-serif;
+  }
 #education h2 {
 color: #374054;
 }
